@@ -6,6 +6,11 @@ import login from '@/components/login/login'
 import shop from '@/components/shop/index'
 import norms from '@/components/shop/norms'
 import common from '@/components/shop/common'
+import tags from '@/components/shop/tags'
+import member from '@/components/member/index'
+import jurisdiction from '@/components/jurisdiction/index'
+import jurisdictionRole from '@/components/jurisdiction/role'
+import jurisdictionAuths from '@/components/jurisdiction/auths'
 
 
 export default new Router({
@@ -41,7 +46,32 @@ export default new Router({
           path: '/common',
           name: 'common',
           component: common,
-        }
+        },
+        {
+          path: '/tags',
+          name: 'tags',
+          component: tags,
+        },
+        {
+          path: '/member',
+          name: 'member',
+          component: member
+        },
+        {
+          path: '/jurisdiction',
+          name: 'jurisdiction',
+          component: jurisdiction
+        },
+        {
+          path: '/jurisdictionRole',
+          name: 'jurisdictionRole',
+          component: jurisdictionRole
+        },
+        {
+          path: '/jurisdictionAuths',
+          name: 'jurisdictionAuths',
+          component: jurisdictionAuths
+        },
       ]
     },
     {

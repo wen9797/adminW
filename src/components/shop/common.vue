@@ -1,5 +1,5 @@
 <template>
-  <div>普通管理</div>
+  <div>普通</div>
 </template>
 
 <script>

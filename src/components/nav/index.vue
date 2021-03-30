@@ -4,6 +4,14 @@
     <el-header>
       <div class="logo"></div>
       <el-menu class="el-menu-demo header" mode="horizontal" router>
+        <el-menu-item>
+          <el-breadcrumb separator-class="el-icon-arrow-right" class="header-name">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+          </el-breadcrumb>
+        </el-menu-item>
         <el-menu-item @click="exitLogin()" style="float: right;padding:0 10px;">
           <div class="header-name">退出登录</div>
         </el-menu-item>
@@ -16,42 +24,46 @@
     <el-container>
       <el-scrollbar>
         <el-menu router default-active="/index">
-          <el-submenu index="1">
-            <template slot="title" >
-              <div class="left-icon"><i class="el-icon-s-marketing"></i></div>
-              <div class="icon-name" style="background: #2f4050">首页</div>
+          <el-submenu :index="i.id+''" v-for="(i,index) in menuList">
+            <template slot="title">
+              <div class="left-icon"><i :class="i.auth_icon"></i></div>
+              <div class="icon-name" style="background: #2f4050">{{i.auth_name}}</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'stockLists'+'?time='+gettime()" v-if="menulist('/stockLists')" @contextmenu.prevent.native="openMenu($event,'stockLists')">
+              <el-menu-item v-for="s in i.children" :index="s.auth_rules+'?time='+gettime()" v-if="menulist('/stockLists')"
+                            @contextmenu.prevent.native="openMenu($event,'stockLists')">
                 <div class="left-icon2">
-                  <i class="el-icon-document-copy"></i>
+                  <i :class="s.auth_icon"></i>
                 </div>
-                <div class="icon-name">系统统计</div>
+                <div class="icon-name">{{s.auth_name}}</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="2">
+          <!--<el-submenu index="2">
             <template slot="title">
               <div class="left-icon"><i class="el-icon-s-tools"></i></div>
               <div class="icon-name" style="background: #2f4050">广告管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">banner图</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">nav图片管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -66,28 +78,32 @@
               <div class="icon-name" style="background: #2f4050">活动商品</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">积分商品</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">抽签商品</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">免单商品</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -102,49 +118,56 @@
               <div class="icon-name" style="background: #2f4050">订单管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">全部订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">普通订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">虚拟订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">积分订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">抽签订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">免单订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -159,42 +182,48 @@
               <div class="icon-name" style="background: #2f4050">商品管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'shop'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">分类管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'norms'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">规格管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'common'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">普通商品</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">标签管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">虚拟商品</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -209,7 +238,8 @@
               <div class="icon-name" style="background: #2f4050">售后管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -224,28 +254,32 @@
               <div class="icon-name" style="background: #2f4050">会员管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'member'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">普通用户</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">虚拟用户</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">SVIP管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -260,28 +294,32 @@
               <div class="icon-name" style="background: #2f4050">财务管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">充值订单</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">用户提现</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">用户资金记录</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -296,21 +334,24 @@
               <div class="icon-name" style="background: #2f4050">权限管理</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'jurisdiction'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">管理员管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'jurisdictionRole'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">角色管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'jurisdictionAuths'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -325,28 +366,32 @@
               <div class="icon-name" style="background: #2f4050">系统设置</div>
             </template>
             <el-menu-item-group>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">基础设置</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">意见反馈</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
                 <div class="icon-name">公告管理</div>
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
-              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')" @contextmenu.prevent.native="openMenu($event,'systemPic')">
+              <el-menu-item :index="'systemPic'+'?time='+gettime()" v-if="menulist('/systemPic')"
+                            @contextmenu.prevent.native="openMenu($event,'systemPic')">
                 <div class="left-icon2">
                   <i class="el-icon-picture-outline"></i>
                 </div>
@@ -354,7 +399,7 @@
                 <i class="el-icon-arrow-right right-icon"></i>
               </el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu>-->
         </el-menu>
       </el-scrollbar>
       <el-main style="position: relative">
@@ -362,7 +407,7 @@
       </el-main>
     </el-container>
     <div v-show="NewWindow" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <el-button size="small" @click="openNewWindow()">新窗口打开</el-button>
+      <el-button size="small" @click="">新窗口打开</el-button>
     </div>
   </div>
 </template>
@@ -372,19 +417,20 @@
     name: "index",
     data() {
       return {
-        href:'',
+        href: '',
         NewWindow: false,
         top: 0,
         left: 0,
-        id:'',
+        id: '',
         password: '',
         newpsw: '',
         newpsw2: '',
         passwordShow: false,
         messageList: [{}],
         activeIndex: "/index",
-        menu:'',
-        user_name:'',
+        menuList: [],
+        menu: '',
+        user_name: '',
       }
     },
     mounted: function () {
@@ -394,44 +440,42 @@
       this.menu = localStorage['menu']
       this.getData()
     },
-    beforeDestroy() {
-      clearInterval(this.timer);
-      this.timer = '';
-    },
     methods: {
-      gettime(){
+      getData() {
+        var _this = this
+        this.$http.get(this.publicurl + '/admin/auths/getAll', {
+          //data: this.data
+        })
+          .then(function (res) {
+            _this.$VerificationLogin(res)
+            if (res.data.code == 1) {
+              console.log(res.data.result)
+              _this.menuList = _this.getMenu(res.data.result);
+              console.log(_this.menuList)
+            }
+          })
+      },
+      gettime() {
         return new Date().getTime()
       },
-      openMenu(e,a) {
+      openMenu(e, a) {
         this.href = a
         this.top = e.clientY // fix 位置bug
-        this.left = e.clientX+30 // fix 位置bug
+        this.left = e.clientX + 30 // fix 位置bug
         this.NewWindow = !this.NewWindow
       },
-      exitLogin(){
+      exitLogin() {
         localStorage.clear();
         sessionStorage.clear();
         this.$router.push('/login')
       },
-      menulist(a){
+      menulist(a) {
         //console.log(a)
         //console.log(this.menu.indexOf(a)!= -1)
         //return this.menu.indexOf(a)!= -1
         return true
       },
-      message() {
-        this.getmessageList();
-        this.messageShow = true
-      },
-      getData(){
-        var _this = this
-        this.$http.get(this.publicurl + '/admin/auths/list', {
-          //data: this.data
-        })
-            .then(function (res) {
-            console.log(res)
-          })
-      },
+
       passwordEdit() {
         var _this = this
         if (this.newpsw != this.newpsw2) {
@@ -470,11 +514,12 @@
 </script>
 
 <style scoped>
-  .contextmenu{
+  .contextmenu {
     position: absolute;
     width: 100px;
     height: 40px;
   }
+
   .left-icon-image {
     margin-top: 10px;
     width: 30px;
@@ -500,8 +545,9 @@
     line-height: 10px;
     background: #f10;
   }
-  .el-menu--horizontal>.el-menu-item.is-active{
-    border-bottom:none !important;
+
+  .el-menu--horizontal > .el-menu-item.is-active {
+    border-bottom: none !important;
   }
 
   .header {
@@ -509,7 +555,7 @@
   }
 
   .header-name {
-    color: #fff;
+    color: #fff !important;
     font-size: 15px;
     height: 15px;
     line-height: 60px;
@@ -531,11 +577,12 @@
     text-align: center;
     position: absolute;
   }
-  .left-icon2 > i{
+
+  .left-icon2 > i {
     color: #fff;
   }
 
-  .left-icon > i{
+  .left-icon > i {
     z-index: 9999;
     color: #fff;
   }
@@ -585,7 +632,7 @@
     text-align: right;
   }
 
-  .el-menu-item-group{
+  .el-menu-item-group {
     width: 200px !important;
   }
 

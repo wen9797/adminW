@@ -6,12 +6,18 @@ import ElementUI from 'element-ui';
 export * from 'echarts/src/echarts';
 //import axios from "./utils/axios"
 import axios from "axios"
-import {VerificationLogin,key} from "./utils/http"
-Vue.prototype.KEY = key;
+import {
+  VerificationLogin,
+  set_time,
+  getMenu,
+} from "./utils/http"
 axios.defaults.baseURL='/';
+Vue.prototype.set_time = set_time;
+Vue.prototype.getMenu = getMenu;
+Vue.prototype.$VerificationLogin=VerificationLogin
+//Vue.prototype.publicurl = 'http://47.108.209.199:9501';
 Vue.prototype.publicurl = 'api';
 Vue.prototype.$http = axios;
-Vue.prototype.$VerificationLogin=VerificationLogin
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 /* eslint-disable no-new */
@@ -21,4 +27,3 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-
